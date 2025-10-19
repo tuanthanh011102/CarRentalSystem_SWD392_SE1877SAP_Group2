@@ -8,6 +8,6 @@ package DAOs;
  *
  * @author tuanthanh
  */
-public class NotificationDAO {
+public class NotificationDAO extends DAO {
     
 }

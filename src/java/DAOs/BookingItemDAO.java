@@ -8,6 +8,6 @@ package DAOs;
  *
  * @author tuanthanh
  */
-public class BookingItemDAO {
+public class BookingItemDAO extends DAO {
     
 }
