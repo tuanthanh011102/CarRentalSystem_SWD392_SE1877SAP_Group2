@@ -105,7 +105,7 @@
     <body class="bg-gradient-to-br from-gray-50 to-green-50">
         <header class="bg-white shadow-md sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center py-5">
+                <div class="flex justify-between items-center py-2">
                     <div>
                         <a href="homepage" class="flex items-center space-x-2">
                             <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
