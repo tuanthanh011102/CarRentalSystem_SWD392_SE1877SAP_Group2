@@ -5,6 +5,7 @@
 package Controller;
 
 import DAOs.CarDAO;
+import DAOs.OwnerDAO;
 import Entities.Car;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -21,27 +22,28 @@ import java.util.logging.Logger;
  */
 @WebServlet(name = "CarDetailController", urlPatterns = {"/car-detail"})
 public class CarDetailController extends HttpServlet {
-    
+
     private CarDAO carDao = new CarDAO();
-    
+    private OwnerDAO ownerDao = new OwnerDAO();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         int carId = 0;
-        
+
         try {
             carId = Integer.parseInt(request.getParameter("carId"));
         } catch (NumberFormatException e) {
             response.sendError(404);
             return;
         }
-        
+
         if (carId < 1) {
             response.sendError(404);
             return;
         }
-        
+
         Car car;
         try {
             car = carDao.getCarById(carId);
@@ -50,19 +52,19 @@ public class CarDetailController extends HttpServlet {
             response.sendError(500);
             return;
         }
-        
+
         if (car == null) {
             response.sendError(404);
         }
-        
+
         request.setAttribute("car", car);
         request.getRequestDispatcher("/Views/car-detail.jsp").forward(request, response);
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
-    
+
 }

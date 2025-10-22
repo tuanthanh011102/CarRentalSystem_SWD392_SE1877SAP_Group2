@@ -39,7 +39,7 @@ public class HomepageController extends HttpServlet {
 
         String pageParam = request.getParameter("page");
         int page = 1;
-        int pageSize = 5;
+        int pageSize = 8;
 
         if (pageParam != null && !pageParam.trim().isEmpty()) {
             try {
