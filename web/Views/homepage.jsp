@@ -13,7 +13,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Mioto - Thuê Xe Tự Lái</title>
+        <title>CRS - Thuê Xe Tự Lái</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -48,19 +48,13 @@
                 <div class="flex justify-between items-center py-4">
                     <!-- Logo -->
                     <div class="flex items-center">
-                        <svg class="w-10 h-10 text-emerald-500" viewBox="0 0 50 50" fill="currentColor">
-                        <path d="M10 15 L25 5 L40 15 L40 35 L25 45 L10 35 Z" stroke="currentColor" stroke-width="2" fill="none"/>
-                        <path d="M18 25 L25 20 L32 25 L32 35 L25 40 L18 35 Z"/>
-                        </svg>
-                        <span class="ml-2 text-2xl font-bold text-gray-900">MIOTO</span>
+                        <span class="ml-2 text-2xl font-bold text-gray-900">CRS</span>
                     </div>
 
                     <!-- Navigation -->
                     <nav class="hidden md:flex items-center space-x-8">
-                        <a href="#" class="text-gray-700 hover:text-emerald-500">Về Mioto</a>
-                        <a href="#" class="text-gray-700 hover:text-emerald-500">Trở thành chủ xe</a>
-                        <a href="#" class="text-gray-700 hover:text-emerald-500">Đăng ký</a>
-                        <a href="#" class="px-6 py-2 border-2 border-gray-900 rounded-lg text-gray-900 hover:bg-gray-900 hover:text-white transition">
+                        <a href="register" class="text-gray-700 hover:text-emerald-500">Đăng ký</a>
+                        <a href="login" class="px-6 py-2 border-2 border-gray-900 rounded-lg text-gray-900 hover:bg-gray-900 hover:text-white transition">
                             Đăng nhập
                         </a>
                     </nav>
@@ -91,7 +85,7 @@
                         </button>
                     </div>
 
-                    <form action="${pageContext.request.contextPath}/home" method="GET">
+                    <form action="${pageContext.request.contextPath}/homepage" method="GET">
                         <div class="grid md:grid-cols-12 gap-4 items-end">
                             <!-- Location -->
                             <div class="md:col-span-4">
@@ -262,24 +256,18 @@
                         <!-- Pagination -->
                         <div class="flex justify-center items-center mt-10 gap-4">
                             <c:if test="${currentPage > 1}">
-                                <a href="?page=${currentPage - 1}
-                                   &searchKey=${fn:escapeXml(param.searchKey)}
-                                   &color=${fn:escapeXml(param.color)}
-                                   &priceOrder=${fn:escapeXml(param.priceOrder)}"
-                                   class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium">
-                                    ← Trang trước
+                                <a href="${pageContext.request.contextPath}/homepage?page=${currentPage - 1}&searchKey=${param.searchKey}&color=${param.color}&priceOrder=${param.priceOrder}"
+                                   class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-gray-800 font-medium transition">
+                                    Trang trước
                                 </a>
                             </c:if>
 
                             <span class="text-gray-700 font-semibold">Trang ${currentPage}</span>
 
                             <c:if test="${hasMorePages}">
-                                <a href="?page=${currentPage + 1}
-                                   &searchKey=${fn:escapeXml(param.searchKey)}
-                                   &color=${fn:escapeXml(param.color)}
-                                   &priceOrder=${fn:escapeXml(param.priceOrder)}"
-                                   class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-white font-medium">
-                                    Trang tiếp →
+                                <a href="${pageContext.request.contextPath}/homepage?page=${currentPage + 1}&searchKey=${param.searchKey}&color=${param.color}&priceOrder=${param.priceOrder}"
+                                   class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg text-white font-medium transition">
+                                    Trang tiếp
                                 </a>
                             </c:if>
                         </div>
