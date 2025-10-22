@@ -10,4 +10,11 @@ package DAOs;
  */
 public class ReviewDAO extends DAO {
     
+    public float getRatingByCarId(long carId){
+        return 0;
+    }
+    
+    public int getTotalReviewCountByCarId(long carId){
+        return 0;
+    }
 }

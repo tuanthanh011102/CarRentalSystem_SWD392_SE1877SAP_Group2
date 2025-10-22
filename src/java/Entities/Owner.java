@@ -4,6 +4,7 @@
  */
 package Entities;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -18,13 +19,13 @@ public class Owner {
     private String contact;
     private String address;
     private String cccdId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     public Owner() {
     }
 
-    public Owner(Long ownerId, Long userId, String name, String contact, String address, String cccdId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Owner(Long ownerId, Long userId, String name, String contact, String address, String cccdId, Timestamp createdAt, Timestamp updatedAt) {
         this.ownerId = ownerId;
         this.userId = userId;
         this.name = name;
@@ -83,19 +84,19 @@ public class Owner {
         this.cccdId = cccdId;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
 
