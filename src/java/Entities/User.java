@@ -4,6 +4,7 @@
  */
 package Entities;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -17,13 +18,13 @@ public class User {
     private String email;
     private String passwordHash;
     private String role; // admin, customer, owner
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     public User() {
     }
 
-    public User(Long userId, String name, String email, String passwordHash, String role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(Long userId, String name, String email, String passwordHash, String role, Timestamp createdAt, Timestamp updatedAt) {
         this.userId = userId;
         this.name = name;
         this.email = email;
@@ -73,31 +74,24 @@ public class User {
         this.role = role;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
 
     @Override
     public String toString() {
-        return "User{"
-                + "userId=" + userId
-                + ", name='" + name + '\''
-                + ", email='" + email + '\''
-                + ", role='" + role + '\''
-                + ", createdAt=" + createdAt
-                + ", updatedAt=" + updatedAt
-                + '}';
+        return "User{" + "userId=" + userId + ", name=" + name + ", email=" + email + ", passwordHash=" + passwordHash + ", role=" + role + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
     }
 }

@@ -4,20 +4,26 @@
  */
 package Controller;
 
+import DAOs.UserDAO;
+import Entities.User;
+import Utils.Utils;
+import com.google.gson.Gson;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-/**
- *
- * @author tuanthanh
- */
 @WebServlet(name = "LoginController", urlPatterns = {"/login"})
 public class LoginController extends HttpServlet {
+
+    private final UserDAO userDao = new UserDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -29,6 +35,38 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-    }
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        Map<String, Object> result = new HashMap<>();
 
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        try {
+            User user = userDao.getUserByEmail(email);
+
+            if (user == null) {
+                result.put("success", false);
+                result.put("message", "Email không tồn tại!");
+            } else {
+                String hashedRequestPassword = Utils.hash(password);
+
+                if (user.getPasswordHash().equals(hashedRequestPassword)) {
+                    request.getSession().setAttribute("user", user);
+                    result.put("success", true);
+                    result.put("message", "Đăng nhập thành công!");
+                } else {
+                    result.put("success", false);
+                    result.put("message", "Sai mật khẩu!");
+                }
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+            result.put("success", false);
+            result.put("message", "Lỗi máy chủ: " + ex.getMessage());
+        }
+
+        response.getWriter().write(new Gson().toJson(result));
+    }
 }

@@ -34,5 +34,8 @@ public class Utils {
             return null;
         }
     }
-
+    
+    public static void main(String[] args) {
+        System.out.println(Utils.hash("Car123456@"));
+    }
 }

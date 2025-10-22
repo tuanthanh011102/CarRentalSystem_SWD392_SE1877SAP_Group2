@@ -53,10 +53,39 @@
 
                     <!-- Navigation -->
                     <nav class="hidden md:flex items-center space-x-8">
-                        <a href="register" class="text-gray-700 hover:text-emerald-500">Đăng ký</a>
-                        <a href="login" class="px-6 py-2 border-2 border-gray-900 rounded-lg text-gray-900 hover:bg-gray-900 hover:text-white transition">
-                            Đăng nhập
-                        </a>
+                        <c:if test="${empty user}">
+                            <a href="register" class="text-gray-700 hover:text-emerald-500">Đăng ký</a>
+                            <a href="login" class="px-6 py-2 border-2 border-gray-900 rounded-lg text-gray-900 hover:bg-gray-900 hover:text-white transition">
+                                Đăng nhập
+                            </a>
+                        </c:if>
+                        <c:if test="${not empty user}">
+                            <div class="relative" id="userMenu">
+                                <button id="userMenuButton" 
+                                        class="flex items-center space-x-2 text-gray-700 hover:text-emerald-600 focus:outline-none">
+                                    <span>${user.name}</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Dropdown -->
+                                <div id="userDropdown" 
+                                     class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 z-50">
+                                    <a href="profile" 
+                                       class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition">
+                                        Trang cá nhân
+                                    </a>
+                                    <form action="logout" method="POST">
+                                        <button type="submit" 
+                                                class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition">
+                                            Đăng xuất
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </c:if>
                     </nav>
                 </div>
             </div>
@@ -296,16 +325,30 @@
         <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-                                            function setActiveTab(tabName) {
-                                                document.querySelectorAll('[id^="tab-"]').forEach(tab => {
-                                                    tab.className = 'tab-inactive flex items-center px-6 py-3 rounded-lg font-medium transition';
-                                                });
-                                                document.getElementById('tab-' + tabName).className = 'tab-active flex items-center px-6 py-3 rounded-lg font-medium transition';
-                                            }
+                                                    $(document).ready(function () {
+                                                        const $menuButton = $('#userMenuButton');
+                                                        const $dropdown = $('#userDropdown');
 
-                                            function viewCarDetail(carId) {
-                                                window.location.href = '${pageContext.request.contextPath}/car-detail?id=' + carId;
-                                            }
+                                                        $menuButton.on('click', function (e) {
+                                                            e.stopPropagation();
+                                                            $dropdown.toggleClass('hidden');
+                                                        });
+
+                                                        $(document).on('click', function () {
+                                                            $dropdown.addClass('hidden');
+                                                        });
+                                                    });
+
+                                                    function setActiveTab(tabName) {
+                                                        document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+                                                            tab.className = 'tab-inactive flex items-center px-6 py-3 rounded-lg font-medium transition';
+                                                        });
+                                                        document.getElementById('tab-' + tabName).className = 'tab-active flex items-center px-6 py-3 rounded-lg font-medium transition';
+                                                    }
+
+                                                    function viewCarDetail(carId) {
+                                                        window.location.href = '${pageContext.request.contextPath}/car-detail?id=' + carId;
+                                                    }
         </script>
     </body>
 </html>
