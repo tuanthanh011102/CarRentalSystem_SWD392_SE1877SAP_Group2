@@ -32,32 +32,84 @@ public class HomepageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         String message = "";
-
         List<Owner> oList = new ArrayList<>();
         List<Car> cList = new ArrayList<>();
-
-        try {
-            cList = carDao.getAllCar(1, 10, "", "", "");
-            oList = ownerDao.getAllOwner(1, 999999999, "");
-        } catch (Exception e) {
-            message = e.getMessage();
-
-            request.setAttribute("message", message);
-            request.getRequestDispatcher("/Views/homepage.jsp").forward(request, response);
-            return;
+        
+        String pageParam = request.getParameter("page");
+        int page = 1;
+        int pageSize = 10;
+        
+        if (pageParam != null && !pageParam.trim().isEmpty()) {
+            try {
+                page = Integer.parseInt(pageParam);
+                if (page < 1) page = 1;
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
         }
-
-        request.setAttribute("carList", cList);
-        request.setAttribute("ownerList", oList);
+        
+        String searchKey = request.getParameter("searchKey");
+        String color = request.getParameter("color");
+        String priceOrder = request.getParameter("priceOrder");
+        
+        if (searchKey != null) {
+            searchKey = searchKey.trim();
+            if (searchKey.isEmpty()) {
+                searchKey = null;
+            }
+        }
+        
+        if (color != null) {
+            color = color.trim();
+            if (color.isEmpty()) {
+                color = null;
+            }
+        }
+        
+        if (priceOrder != null) {
+            priceOrder = priceOrder.trim().toUpperCase();
+            if (!priceOrder.equals("ASC") && !priceOrder.equals("DESC")) {
+                priceOrder = null;
+            }
+        }
+        
+        try {
+            cList = carDao.getAllCar(
+                page, 
+                pageSize, 
+                searchKey != null ? searchKey : "", 
+                color != null ? color : "", 
+                priceOrder != null ? priceOrder : ""
+            );
+            
+            oList = ownerDao.getAllOwner(1, 999999999, "");
+            
+            request.setAttribute("carList", cList);
+            request.setAttribute("ownerList", oList);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("pageSize", pageSize);
+            
+            request.setAttribute("searchKey", searchKey);
+            request.setAttribute("color", color);
+            request.setAttribute("priceOrder", priceOrder);
+            
+            boolean hasMorePages = cList.size() == pageSize;
+            request.setAttribute("hasMorePages", hasMorePages);
+            
+        } catch (Exception e) {
+            message = "Có lỗi xảy ra khi tải dữ liệu: " + e.getMessage();
+            request.setAttribute("message", message);
+            e.printStackTrace();
+        }
+        
         request.getRequestDispatcher("/Views/homepage.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
     }
-
 }
