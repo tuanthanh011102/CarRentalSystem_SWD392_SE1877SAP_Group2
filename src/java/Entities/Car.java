@@ -5,6 +5,7 @@
 package Entities;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -21,13 +22,15 @@ public class Car {
     private String registrationNo;
     private BigDecimal pricePer;
     private String status; // available, rented, maintenance
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String location;
+    private String thumbnail;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
 
     public Car() {
     }
 
-    public Car(Long carId, Long ownerId, String name, String model, String color, String registrationNo, BigDecimal pricePer, String status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Car(Long carId, Long ownerId, String name, String model, String color, String registrationNo, BigDecimal pricePer, String status, Timestamp createdAt, Timestamp updatedAt) {
         this.carId = carId;
         this.ownerId = ownerId;
         this.name = name;
@@ -104,35 +107,40 @@ public class Car {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     @Override
     public String toString() {
-        return "Car{"
-                + "carId=" + carId
-                + ", ownerId=" + ownerId
-                + ", name='" + name + '\''
-                + ", model='" + model + '\''
-                + ", color='" + color + '\''
-                + ", registrationNo='" + registrationNo + '\''
-                + ", pricePer=" + pricePer
-                + ", status='" + status + '\''
-                + ", createdAt=" + createdAt
-                + ", updatedAt=" + updatedAt
-                + '}';
+        return "Car{" + "carId=" + carId + ", ownerId=" + ownerId + ", name=" + name + ", model=" + model + ", color=" + color + ", registrationNo=" + registrationNo + ", pricePer=" + pricePer + ", status=" + status + ", location=" + location + ", thumbnail=" + thumbnail + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + '}';
     }
 }
