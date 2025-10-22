@@ -41,7 +41,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center py-2">
                     <div>
-                        <a href="#" class="flex items-center space-x-2">
+                        <a href="homepage" class="flex items-center space-x-2">
                             <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -53,10 +53,48 @@
                     </div>
 
                     <nav class="hidden md:flex items-center space-x-6">
-                        <a href="#" class="text-gray-600 hover:text-green-600 font-medium transition-colors">Đăng ký</a>
-                        <a href="#" class="px-6 py-2.5 gradient-bg rounded-lg text-white font-semibold hover:shadow-lg transition-all duration-300">
-                            Đăng nhập
-                        </a>
+                        <c:if test="${empty user}">
+                            <a href="register" class="text-gray-600 hover:text-green-600 font-medium transition-colors">Đăng ký</a>
+                            <a href="login" class="px-6 py-2.5 gradient-bg rounded-lg text-white font-semibold hover:shadow-lg transition-all duration-300">
+                                Đăng nhập
+                            </a>
+                        </c:if>
+                        <c:if test="${not empty user}">
+                            <div class="relative" id="userMenu">
+                                <button id="userMenuButton" 
+                                        class="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-600 transition-all focus:outline-none">
+                                    <div class="w-8 h-8 gradient-bg rounded-full flex items-center justify-center text-white font-semibold">
+                                        ${fn:substring(user.name, 0, 1)}
+                                    </div>
+                                    <span class="font-medium">${user.name}</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+
+                                <div id="userDropdown" 
+                                     class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                                    <a href="profile" 
+                                       class="flex items-center px-4 py-3 text-gray-700 hover:bg-green-50 hover:text-green-600 transition-colors">
+                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                        </svg>
+                                        Trang cá nhân
+                                    </a>
+                                    <form action="logout" method="POST">
+                                        <button type="submit" 
+                                                class="w-full flex items-center px-4 py-3 text-red-600 hover:bg-red-50 transition-colors">
+                                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                                            </svg>
+                                            Đăng xuất
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </c:if>
                     </nav>
                 </div>
             </div>
@@ -318,6 +356,20 @@
                             confirmButtonColor: '#28a745'
                         });
                     }
+                });
+            });
+
+            $(document).ready(function () {
+                const $menuButton = $('#userMenuButton');
+                const $dropdown = $('#userDropdown');
+
+                $menuButton.on('click', function (e) {
+                    e.stopPropagation();
+                    $dropdown.toggleClass('hidden');
+                });
+
+                $(document).on('click', function () {
+                    $dropdown.addClass('hidden');
                 });
             });
         </script>
