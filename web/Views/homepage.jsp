@@ -347,7 +347,7 @@
                                                     }
 
                                                     function viewCarDetail(carId) {
-                                                        window.location.href = '${pageContext.request.contextPath}/car-detail?id=' + carId;
+                                                        window.location.href = '${pageContext.request.contextPath}/car-detail?carId=' + carId;
                                                     }
         </script>
     </body>
