@@ -293,7 +293,7 @@
                     <c:otherwise>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                             <c:forEach var="car" items="${carList}">
-                                <div class="car-card bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer">
+                                <div class="car-card bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer" onclick="viewCarDetail(${car.carId})">
                                     <div class="relative h-56 bg-gradient-to-br from-gray-100 to-gray-200">
                                         <c:choose>
                                             <c:when test="${not empty car.thumbnail}">
@@ -308,11 +308,11 @@
                                                 </div>
                                             </c:otherwise>
                                         </c:choose>
-                                        <div class="absolute top-4 right-4">
+<!--                                        <div class="absolute top-4 right-4">
                                             <span class="status-badge text-white text-xs font-bold px-4 py-2 rounded-full">
                                                 ${car.status}
                                             </span>
-                                        </div>
+                                        </div>-->
                                     </div>
 
                                     <div class="p-6">
@@ -357,7 +357,7 @@
                                                 </span>
                                                 <span class="text-sm text-gray-500 font-medium">/ngày</span>
                                             </div>
-                                            <div class="flex gap-3">
+<!--                                            <div class="flex gap-3">
                                                 <button onclick="viewCarDetail(${car.carId})"
                                                         class="flex-1 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white px-4 py-3 rounded-xl text-sm font-bold transition-all transform hover:scale-105 shadow-md">
                                                     Chi tiết
@@ -366,7 +366,7 @@
                                                         class="flex-1 gradient-bg hover:shadow-xl text-white px-4 py-3 rounded-xl text-sm font-bold transition-all transform hover:scale-105">
                                                     Thuê xe
                                                 </button>
-                                            </div>
+                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
