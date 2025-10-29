@@ -9,12 +9,15 @@ import DAOs.OwnerDAO;
 import DAOs.ReviewDAO;
 import Entities.Car;
 import Entities.Owner;
+import Entities.Review;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,6 +76,23 @@ public class CarDetailController extends HttpServlet {
             response.sendError(404);
         }
 
+        float rating = 0;
+        int totalReview = 0;
+        List<Review> rList = new ArrayList();
+
+        try {
+            rating = reviewDao.getRatingByCarId(carId);
+            totalReview = reviewDao.getTotalReviewCountByCarId(carId);
+            rList = reviewDao.getAllReviewByCarId(carId);
+        } catch (Exception ex) {
+            response.sendError(500);
+            Logger.getLogger(CarDetailController.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+
+        request.setAttribute("rating", rating);
+        request.setAttribute("totalReview", totalReview);
+        request.setAttribute("rList", rList);
         request.setAttribute("owner", owner);
         request.setAttribute("car", car);
         request.getRequestDispatcher("/Views/car-detail.jsp").forward(request, response);

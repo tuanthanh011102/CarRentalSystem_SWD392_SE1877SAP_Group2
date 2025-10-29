@@ -106,12 +106,26 @@
                      class="w-full h-[500px] object-cover" alt="Toyota Vios">
             </div>
 
-            <div class="flex justify-between items-start mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">${car.name}</h1>
-                    <div class="flex items-center text-gray-600">
+                    <!-- Car Name and Rating -->
+                    <div class="flex flex-wrap items-center gap-3 mb-2">
+                        <h1 class="text-3xl md:text-4xl font-bold text-gray-900">${car.name}</h1>
+                        <div class="flex items-center bg-yellow-50 text-yellow-600 px-3 py-1 rounded-full shadow-sm">
+                            <svg class="w-5 h-5 fill-current mr-1" viewBox="0 0 20 20">
+                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                            </svg>
+                            <span class="font-semibold">${rating}</span>
+                            <span class="text-gray-500 text-sm ml-1">(${totalReview} đánh giá)</span>
+                        </div>
+                    </div>
+
+                    <!-- Location -->
+                    <div class="flex items-center text-gray-600 mt-1">
                         <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                        <path fill-rule="evenodd" 
+                              d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" 
+                              clip-rule="evenodd"/>
                         </svg>
                         <span class="font-medium">${car.location}</span>
                     </div>
@@ -171,43 +185,46 @@
                         <div>
                             <h1 class="text-2xl font-bold text-gray-900 mb-6">Đánh giá từ những khách hàng khác</h1>
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                <!-- Review Card 1 -->
-                                <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100">
-                                    <div class="flex items-start justify-between mb-4">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
-                                                DA
-                                            </div>
-                                            <div>
-                                                <p class="font-semibold text-gray-900">Do Hoang Anh</p>
-                                                <div class="flex items-center gap-1 mt-1">
-                                                    <svg class="w-4 h-4 fill-yellow-400" viewBox="0 0 20 20">
-                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 fill-yellow-400" viewBox="0 0 20 20">
-                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 fill-yellow-400" viewBox="0 0 20 20">
-                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 fill-yellow-400" viewBox="0 0 20 20">
-                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 fill-gray-300" viewBox="0 0 20 20">
-                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                                    </svg>
+                                <c:forEach items="${rList}" var="r">
+                                    <div class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6 border border-gray-100">
+                                        <div class="flex items-start justify-between mb-4">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                                                    ${fn:substring(r.customer.name, 0, 1)}
+                                                </div>
+                                                <div>
+                                                    <p class="font-semibold text-gray-900">${r.customer.name}</p>
+                                                    <div class="flex items-center gap-1 mt-1">
+                                                        <c:forEach var="i" begin="1" end="5">
+                                                            <c:choose>
+                                                                <c:when test="${i <= r.rating}">
+                                                                    <!-- Filled star -->
+                                                                    <svg class="w-4 h-4 fill-yellow-400" viewBox="0 0 20 20">
+                                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                                                    </svg>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <!-- Empty star -->
+                                                                    <svg class="w-4 h-4 fill-gray-300" viewBox="0 0 20 20">
+                                                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                                                    </svg>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </c:forEach>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
+                                        <p class="text-gray-700 mb-4 leading-relaxed">${r.comment}</p>
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                            ${r.createdAt}
+                                        </div>
                                     </div>
-                                    <p class="text-gray-700 mb-4 leading-relaxed">Xe đẹp vkl! Chất lượng tuyệt vời, đi rất êm.</p>
-                                    <div class="flex items-center text-sm text-gray-500">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                        </svg>
-                                        20/10/2025
-                                    </div>
-                                </div>
+                                </c:forEach>
                             </div>
                         </div>
                     </div>
