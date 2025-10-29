@@ -6,6 +6,7 @@ package Controller;
 
 import DAOs.CarDAO;
 import DAOs.OwnerDAO;
+import DAOs.ReviewDAO;
 import Entities.Car;
 import Entities.Owner;
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class CarDetailController extends HttpServlet {
 
     private CarDAO carDao = new CarDAO();
     private OwnerDAO ownerDao = new OwnerDAO();
+    private ReviewDAO reviewDao = new ReviewDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
