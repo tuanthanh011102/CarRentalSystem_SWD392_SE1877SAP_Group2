@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class CarDAO extends DAO {
 
+    private ReviewDAO reviewDao = new ReviewDAO();
+    
     public static void main(String[] args) {
         CarDAO cDAO = new CarDAO();
         try {
@@ -85,6 +87,10 @@ public class CarDAO extends DAO {
                 c.setThumbnail(rs.getString("thumbnail"));
                 c.setCreatedAt(rs.getTimestamp("created_at"));
                 c.setUpdatedAt(rs.getTimestamp("updated_at"));
+                
+                c.setRating(reviewDao.getRatingByCarId(rs.getLong("car_id")));
+                c.setTotalReview(reviewDao.getTotalReviewCountByCarId(rs.getLong("car_id")));
+                
                 carList.add(c);
             }
 

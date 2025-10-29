@@ -27,7 +27,26 @@ public class Car {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+    private float rating;
+    private int totalReview;
+
     public Car() {
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
+
+    public int getTotalReview() {
+        return totalReview;
+    }
+
+    public void setTotalReview(int totalReview) {
+        this.totalReview = totalReview;
     }
 
     public Car(Long carId, Long ownerId, String name, String model, String color, String registrationNo, BigDecimal pricePer, String status, Timestamp createdAt, Timestamp updatedAt) {

@@ -308,11 +308,18 @@
                                                 </div>
                                             </c:otherwise>
                                         </c:choose>
-<!--                                        <div class="absolute top-4 right-4">
-                                            <span class="status-badge text-white text-xs font-bold px-4 py-2 rounded-full">
+                                        <div class="absolute top-3 right-3">
+                                            <span class="status-badge text-white text-xs font-bold px-4 py-2 rounded-full mr-2">
                                                 ${car.status}
                                             </span>
-                                        </div>-->
+                                            <span class="inline-flex gap-1 items-center bg-yellow-500 text-white text-xs font-bold px-4 py-2 rounded-full">
+                                                ${car.rating} 
+                                                <svg class="w-4 h-4 mr-1 fill-current" viewBox="0 0 20 20">
+                                                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                                </svg>
+                                                <p class="font-normal ml-1">(${car.totalReview} đánh giá)</p>
+                                            </span>
+                                        </div>
                                     </div>
 
                                     <div class="p-6">
@@ -357,16 +364,16 @@
                                                 </span>
                                                 <span class="text-sm text-gray-500 font-medium">/ngày</span>
                                             </div>
-<!--                                            <div class="flex gap-3">
-                                                <button onclick="viewCarDetail(${car.carId})"
-                                                        class="flex-1 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white px-4 py-3 rounded-xl text-sm font-bold transition-all transform hover:scale-105 shadow-md">
-                                                    Chi tiết
-                                                </button>
-                                                <button onclick="viewCarDetail(${car.carId})"
-                                                        class="flex-1 gradient-bg hover:shadow-xl text-white px-4 py-3 rounded-xl text-sm font-bold transition-all transform hover:scale-105">
-                                                    Thuê xe
-                                                </button>
-                                            </div>-->
+                                            <!--                                            <div class="flex gap-3">
+                                                                                            <button onclick="viewCarDetail(${car.carId})"
+                                                                                                    class="flex-1 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white px-4 py-3 rounded-xl text-sm font-bold transition-all transform hover:scale-105 shadow-md">
+                                                                                                Chi tiết
+                                                                                            </button>
+                                                                                            <button onclick="viewCarDetail(${car.carId})"
+                                                                                                    class="flex-1 gradient-bg hover:shadow-xl text-white px-4 py-3 rounded-xl text-sm font-bold transition-all transform hover:scale-105">
+                                                                                                Thuê xe
+                                                                                            </button>
+                                                                                        </div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -425,30 +432,30 @@
         <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-                                                    $(document).ready(function () {
-                                                        const $menuButton = $('#userMenuButton');
-                                                        const $dropdown = $('#userDropdown');
+                                    $(document).ready(function () {
+                                        const $menuButton = $('#userMenuButton');
+                                        const $dropdown = $('#userDropdown');
 
-                                                        $menuButton.on('click', function (e) {
-                                                            e.stopPropagation();
-                                                            $dropdown.toggleClass('hidden');
-                                                        });
+                                        $menuButton.on('click', function (e) {
+                                            e.stopPropagation();
+                                            $dropdown.toggleClass('hidden');
+                                        });
 
-                                                        $(document).on('click', function () {
-                                                            $dropdown.addClass('hidden');
-                                                        });
-                                                    });
+                                        $(document).on('click', function () {
+                                            $dropdown.addClass('hidden');
+                                        });
+                                    });
 
-                                                    function setActiveTab(tabName) {
-                                                        document.querySelectorAll('[id^="tab-"]').forEach(tab => {
-                                                            tab.className = 'tab-inactive flex items-center px-6 py-3 rounded-xl font-semibold transition-all';
-                                                        });
-                                                        document.getElementById('tab-' + tabName).className = 'tab-active flex items-center px-6 py-3 rounded-xl font-semibold transition-all';
-                                                    }
+                                    function setActiveTab(tabName) {
+                                        document.querySelectorAll('[id^="tab-"]').forEach(tab => {
+                                            tab.className = 'tab-inactive flex items-center px-6 py-3 rounded-xl font-semibold transition-all';
+                                        });
+                                        document.getElementById('tab-' + tabName).className = 'tab-active flex items-center px-6 py-3 rounded-xl font-semibold transition-all';
+                                    }
 
-                                                    function viewCarDetail(carId) {
-                                                        window.location.href = '${pageContext.request.contextPath}/car-detail?carId=' + carId;
-                                                    }
+                                    function viewCarDetail(carId) {
+                                        window.location.href = '${pageContext.request.contextPath}/car-detail?carId=' + carId;
+                                    }
         </script>
     </body>
 </html>

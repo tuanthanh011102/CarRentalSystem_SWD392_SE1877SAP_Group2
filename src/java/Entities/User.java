@@ -5,7 +5,6 @@
 package Entities;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 /**
  *
@@ -20,6 +19,8 @@ public class User {
     private String role; // admin, customer, owner
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    
+    
 
     public User() {
     }
