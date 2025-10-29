@@ -123,6 +123,26 @@
                     <div class="bg-white p-6 rounded-2xl shadow-md card-hover">
                         <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
                             <span class="w-1 h-8 gradient-bg rounded-full mr-3"></span>
+                            Chủ xe
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
+                                <div>
+                                    <p class="text-sm text-gray-500">Tên</p>
+                                    <p class="font-semibold text-gray-900">${owner.name}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl">
+                                <div>
+                                    <p class="text-sm text-gray-500">Liên hệ</p>
+                                    <p class="font-semibold text-gray-900">${owner.contact}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-md card-hover">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                            <span class="w-1 h-8 gradient-bg rounded-full mr-3"></span>
                             Đặc điểm nổi bật
                         </h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -238,6 +258,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
             const pricePerDay = ${car.pricePer};
+            const carId = ${car.carId};
 
             let pickupDateTime = null;
             let returnDateTime = null;
@@ -348,12 +369,24 @@
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Đặt xe thành công!',
-                            text: 'Chúng tôi sẽ liên hệ với bạn sớm nhất.',
-                            confirmButtonText: 'Đóng',
-                            confirmButtonColor: '#28a745'
+                        $.ajax({
+                            url: "${pageContext.request.contextPath}/booking",
+                            method: "POST",
+                            data: {
+                                carId: carId,
+                                pickupDate: pickupDate,
+                                returnDate: returnDate,
+                                rentalDays: rentalDays,
+                                totalPrice: totalPrice
+                            }, success(response) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Đặt xe thành công!',
+                                    text: 'Chúng tôi sẽ liên hệ với bạn sớm nhất.',
+                                    confirmButtonText: 'Đóng',
+                                    confirmButtonColor: '#28a745'
+                                });
+                            }
                         });
                     }
                 });

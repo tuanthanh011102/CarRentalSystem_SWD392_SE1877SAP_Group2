@@ -7,6 +7,7 @@ package Controller;
 import DAOs.CarDAO;
 import DAOs.OwnerDAO;
 import Entities.Car;
+import Entities.Owner;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -45,6 +46,7 @@ public class CarDetailController extends HttpServlet {
         }
 
         Car car;
+        Owner owner;
         try {
             car = carDao.getCarById(carId);
         } catch (Exception ex) {
@@ -57,6 +59,19 @@ public class CarDetailController extends HttpServlet {
             response.sendError(404);
         }
 
+        try {
+            owner = ownerDao.getOwnerById(car.getOwnerId());
+        } catch (Exception ex) {
+            Logger.getLogger(CarDetailController.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendError(500);
+            return;
+        }
+
+        if (owner == null) {
+            response.sendError(404);
+        }
+
+        request.setAttribute("owner", owner);
         request.setAttribute("car", car);
         request.getRequestDispatcher("/Views/car-detail.jsp").forward(request, response);
     }

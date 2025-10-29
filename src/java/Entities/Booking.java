@@ -15,6 +15,8 @@ public class Booking {
 
     private Long bookingId;
     private Long customerId;
+    private Long carId;
+    private double price;
     private LocalDate startDate;
     private LocalDate returnDate;
     private String bookingStatus; // pending, confirmed, completed, cancelled
@@ -90,6 +92,22 @@ public class Booking {
         this.updatedAt = updatedAt;
     }
 
+    public Long getCarId() {
+        return carId;
+    }
+
+    public void setCarId(Long carId) {
+        this.carId = carId;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+    
     @Override
     public String toString() {
         return "Booking{"
