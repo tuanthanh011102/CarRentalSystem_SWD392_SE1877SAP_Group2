@@ -10,6 +10,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 
 /**
  *
@@ -25,10 +26,56 @@ public class BookingDAO extends DAO {
 //            test.setStartDate(LocalDate.now());
 //            test.setReturnDate(LocalDate.now());
 //            System.out.println(bDao.createBooking(test));
-            System.out.println(bDao.updateBookingStatus((long)4, "confirmed"));
+//            System.out.println(bDao.updateBookingStatus((long) 4, "confirmed"));
+            LocalDate start = LocalDate.of(2025, Month.OCTOBER, 29);
+            LocalDate end = LocalDate.of(2025, Month.OCTOBER, 31);
+            
+            System.out.println(bDao.isCarBookedForDates(1, start, end));
         } catch (Exception e) {
             System.err.println(e);
         }
+    }
+
+    public boolean isCarBookedForDates(long carId, LocalDate startDate, LocalDate endDate)
+            throws SQLException, Exception {
+        String sql = """
+        SELECT COUNT(*) 
+        FROM booking 
+        WHERE car_id = ? 
+        AND booking_status NOT IN ('cancelled', 'rejected')
+        AND (
+            (start_date <= ? AND return_date >= ?) OR
+            (start_date <= ? AND return_date >= ?) OR
+            (start_date >= ? AND return_date <= ?)
+        )
+    """;
+
+        try {
+            con = dbc.getConnection();
+            ps = con.prepareCall(sql);
+
+            ps.setLong(1, carId);
+            ps.setDate(2, Date.valueOf(endDate));
+            ps.setDate(3, Date.valueOf(endDate));
+            ps.setDate(4, Date.valueOf(startDate));
+            ps.setDate(5, Date.valueOf(startDate));
+            ps.setDate(6, Date.valueOf(startDate));
+            ps.setDate(7, Date.valueOf(endDate));
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            throw new Exception("Something wrong during isCarBookedForDates(): " + e.getMessage());
+        } finally {
+            try {
+                this.closeResources();
+            } catch (Exception e) {
+                throw new Exception("Something wrong during closing resources in isCarBookedForDates(): " + e.getMessage());
+            }
+        }
+        return false;
     }
 
     public Booking getBookingById(long id) throws Exception {

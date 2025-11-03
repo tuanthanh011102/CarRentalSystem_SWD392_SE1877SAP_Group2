@@ -16,27 +16,30 @@ import java.util.List;
 public class CarDAO extends DAO {
 
     private ReviewDAO reviewDao = new ReviewDAO();
-    
+
     public static void main(String[] args) {
         CarDAO cDAO = new CarDAO();
         try {
-            System.out.println(cDAO.getAllCar(1, 5, "", "", "").size());
+            System.out.println(cDAO.getAllCar(1, 5, "ford", "", "", "").size());
         } catch (Exception ex) {
             System.err.println(ex);
         }
     }
 
-    public List<Car> getAllCar(int page, int pageSize, String searchKey, String color, String priceOrder) throws SQLException, Exception {
+    public List<Car> getAllCar(int page, int pageSize, String searchKey, String color, String priceOrder, String location) throws SQLException, Exception {
         List<Car> carList = new ArrayList<>();
-
         StringBuilder sql = new StringBuilder("""
-            SELECT *
-            FROM car
-            WHERE status = 'available'
-        """);
+        SELECT *
+        FROM car
+        WHERE status = 'available'
+    """);
 
         if (searchKey != null && !searchKey.trim().isEmpty()) {
-            sql.append(" AND (name LIKE ? OR model LIKE ? OR location LIKE ?) ");
+            sql.append(" AND (name LIKE ? OR model LIKE ?) ");
+        }
+
+        if (location != null && !location.trim().isEmpty()) {
+            sql.append(" AND location LIKE ? ");
         }
 
         if (color != null && !color.trim().isEmpty()) {
@@ -46,7 +49,7 @@ public class CarDAO extends DAO {
         if (priceOrder != null && (priceOrder.equalsIgnoreCase("ASC") || priceOrder.equalsIgnoreCase("DESC"))) {
             sql.append(" ORDER BY price_per ").append(priceOrder);
         } else {
-            sql.append(" ORDER BY created_at DESC "); // default
+            sql.append(" ORDER BY created_at DESC ");
         }
 
         sql.append(" LIMIT ? OFFSET ? ");
@@ -54,13 +57,17 @@ public class CarDAO extends DAO {
         try {
             con = dbc.getConnection();
             ps = con.prepareStatement(sql.toString());
-
             int paramIndex = 1;
 
+            // Bind parameters in the SAME order as they appear in the SQL
             if (searchKey != null && !searchKey.trim().isEmpty()) {
                 String key = "%" + searchKey.trim() + "%";
-                ps.setString(paramIndex++, key);
-                ps.setString(paramIndex++, key);
+                ps.setString(paramIndex++, key); // for name LIKE ?
+                ps.setString(paramIndex++, key); // for model LIKE ?
+            }
+
+            if (location != null && !location.trim().isEmpty()) {
+                String key = "%" + location.trim() + "%";
                 ps.setString(paramIndex++, key);
             }
 
@@ -87,13 +94,12 @@ public class CarDAO extends DAO {
                 c.setThumbnail(rs.getString("thumbnail"));
                 c.setCreatedAt(rs.getTimestamp("created_at"));
                 c.setUpdatedAt(rs.getTimestamp("updated_at"));
-                
+
                 c.setRating(reviewDao.getRatingByCarId(rs.getLong("car_id")));
                 c.setTotalReview(reviewDao.getTotalReviewCountByCarId(rs.getLong("car_id")));
-                
+
                 carList.add(c);
             }
-
         } catch (SQLException e) {
             throw new SQLException("Something wrong with DAO while getAllCar(), please check: " + e);
         } finally {
@@ -103,7 +109,6 @@ public class CarDAO extends DAO {
                 throw new Exception("Something wrong while closing resources in getAllCar(): " + ex);
             }
         }
-
         return carList;
     }
 

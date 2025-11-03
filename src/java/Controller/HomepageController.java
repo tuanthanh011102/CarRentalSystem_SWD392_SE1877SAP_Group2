@@ -32,7 +32,6 @@ public class HomepageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String message = "";
         List<Owner> oList = new ArrayList<>();
         List<Car> cList = new ArrayList<>();
@@ -53,6 +52,7 @@ public class HomepageController extends HttpServlet {
         }
 
         String searchKey = request.getParameter("searchKey");
+        String location = request.getParameter("location");
         String color = request.getParameter("color");
         String priceOrder = request.getParameter("priceOrder");
 
@@ -60,6 +60,13 @@ public class HomepageController extends HttpServlet {
             searchKey = searchKey.trim();
             if (searchKey.isEmpty()) {
                 searchKey = null;
+            }
+        }
+
+        if (location != null) {
+            location = location.trim();
+            if (location.isEmpty()) {
+                location = null;
             }
         }
 
@@ -81,17 +88,19 @@ public class HomepageController extends HttpServlet {
             cList = carDao.getAllCar(
                     page,
                     pageSize,
-                    searchKey != null ? searchKey : "",
-                    color != null ? color : "",
-                    priceOrder != null ? priceOrder : ""
+                    searchKey,
+                    color,
+                    priceOrder,
+                    location
             );
-
+            
             int totalCars = carDao.getAllCar(
-                    page,
+                    1,
                     Integer.MAX_VALUE,
-                    searchKey != null ? searchKey : "",
-                    color != null ? color : "",
-                    priceOrder != null ? priceOrder : ""
+                    searchKey,
+                    color,
+                    priceOrder,
+                    location
             ).size();
 
             oList = ownerDao.getAllOwner(1, 999999999, "");
@@ -100,12 +109,13 @@ public class HomepageController extends HttpServlet {
             request.setAttribute("ownerList", oList);
             request.setAttribute("currentPage", page);
             request.setAttribute("pageSize", pageSize);
-
             request.setAttribute("searchKey", searchKey);
+            request.setAttribute("location", location);
             request.setAttribute("color", color);
             request.setAttribute("priceOrder", priceOrder);
 
             int totalPages = (int) Math.ceil((double) totalCars / pageSize);
+            request.setAttribute("totalPages", totalPages);
             boolean hasMorePages = page < totalPages;
             request.setAttribute("hasMorePages", hasMorePages);
 

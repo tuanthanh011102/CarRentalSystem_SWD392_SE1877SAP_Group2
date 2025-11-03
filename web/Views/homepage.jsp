@@ -189,6 +189,17 @@
                     </div>
 
                     <form action="${pageContext.request.contextPath}/homepage" method="GET">
+                        <div class=" mb-4">
+                                <label class="block text-md font-semibold text-gray-700 mb-2">
+                                    Tìm Kiếm
+                                </label>
+                                <input 
+                                    value="${searchKey}"
+                                    type="text"
+                                    name="searchKey"
+                                    placeholder="Tìm Kiếm ..."
+                                    class="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" />
+                            </div>
                         <div class="grid md:grid-cols-12 gap-5 items-end">
                             <div class="md:col-span-4">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">
@@ -198,12 +209,12 @@
                                     </svg>
                                     Địa điểm
                                 </label>
-                                <select name="searchKey" class="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                                <select name="location" class="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
                                     <option value="">Tất cả địa điểm</option>
-                                    <option value="TP. Hồ Chí Minh" ${param.searchKey == 'TP. Hồ Chí Minh' ? 'selected' : ''}>TP. Hồ Chí Minh</option>
-                                    <option value="Hà Nội" ${param.searchKey == 'Hà Nội' ? 'selected' : ''}>Hà Nội</option>
-                                    <option value="Đà Nẵng" ${param.searchKey == 'Đà Nẵng' ? 'selected' : ''}>Đà Nẵng</option>
-                                    <option value="Cần Thơ" ${param.searchKey == 'Cần Thơ' ? 'selected' : ''}>Cần Thơ</option>
+                                    <option value="TP. Hồ Chí Minh" ${param.location == 'TP. Hồ Chí Minh' ? 'selected' : ''}>TP. Hồ Chí Minh</option>
+                                    <option value="Hà Nội" ${param.location == 'Hà Nội' ? 'selected' : ''}>Hà Nội</option>
+                                    <option value="Đà Nẵng" ${param.location == 'Đà Nẵng' ? 'selected' : ''}>Đà Nẵng</option>
+                                    <option value="Cần Thơ" ${param.location == 'Cần Thơ' ? 'selected' : ''}>Cần Thơ</option>
                                 </select>
                             </div>
 
@@ -221,6 +232,9 @@
                                     <option value="Xám" ${param.color == 'Xám' ? 'selected' : ''}>Xám</option>
                                     <option value="Đỏ" ${param.color == 'Đỏ' ? 'selected' : ''}>Đỏ</option>
                                     <option value="Xanh" ${param.color == 'Xanh' ? 'selected' : ''}>Xanh</option>
+                                    <option value="Bạc" ${param.color == 'Bạc' ? 'selected' : ''}>Bạc</option>
+                                    <option value="Xanh Đậm" ${param.color == 'Xanh Đậm' ? 'selected' : ''}>Xanh Đậm</option>
+                                    <option value="Trắng Ngọc" ${param.color == 'Trắng Ngọc' ? 'selected' : ''}>Trắng Ngọc</option>
                                 </select>
                             </div>
 

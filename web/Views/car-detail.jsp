@@ -102,7 +102,7 @@
 
         <div class="max-w-7xl mx-auto p-6 py-8">
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8 card-hover">
-                <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800" 
+                <img src="${car.thumbnail}" 
                      class="w-full h-[500px] object-cover" alt="Toyota Vios">
             </div>
 
@@ -225,6 +225,9 @@
                                         </div>
                                     </div>
                                 </c:forEach>
+                                <c:if test="${empty rList}">
+                                    <h1 class="text-lg text-gray-500 mb-6">Chưa có đánh giá nào</h1>
+                                </c:if>
                             </div>
                         </div>
                     </div>
@@ -384,13 +387,32 @@
                 document.getElementById("btnRent").disabled = false;
             }
 
-            // Format number with thousand separator
             function formatNumber(num) {
                 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
 
-            // Rent button
             document.getElementById("btnRent").addEventListener("click", function () {
+                const isLoggedIn = ${not empty user};
+                
+                if (!isLoggedIn) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Yêu cầu đăng nhập',
+                        text: 'Bạn cần đăng nhập để đặt xe!',
+                        showCancelButton: true,
+                        confirmButtonText: 'Đăng nhập',
+                        cancelButtonText: 'Hủy',
+                        confirmButtonColor: '#10b981',
+                        cancelButtonColor: '#6b7280',
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'login';
+                        }
+                    });
+                    return;
+                }
+                
                 if (!pickupDateTime || !returnDateTime) {
                     Swal.fire({
                         icon: 'warning',
