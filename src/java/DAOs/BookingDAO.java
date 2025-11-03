@@ -29,7 +29,7 @@ public class BookingDAO extends DAO {
 //            System.out.println(bDao.updateBookingStatus((long) 4, "confirmed"));
             LocalDate start = LocalDate.of(2025, Month.OCTOBER, 29);
             LocalDate end = LocalDate.of(2025, Month.OCTOBER, 31);
-            
+
             System.out.println(bDao.isCarBookedForDates(1, start, end));
         } catch (Exception e) {
             System.err.println(e);
@@ -123,10 +123,14 @@ public class BookingDAO extends DAO {
         String sql = """
                      INSERT INTO `crs`.`booking`
                      (`customer_id`,
+                     `car_id`,
+                     `price`,
                      `start_date`,
                      `return_date`)
                      VALUES
                      (?,
+                     ?,
+                     ?,
                      ?,
                      ?);
                      """;
@@ -136,8 +140,10 @@ public class BookingDAO extends DAO {
             ps = con.prepareStatement(sql);
 
             ps.setLong(1, b.getCustomerId());
-            ps.setDate(2, Date.valueOf(b.getStartDate()));
-            ps.setDate(3, Date.valueOf(b.getReturnDate()));
+            ps.setLong(2, b.getCarId());
+            ps.setDouble(3, b.getPrice());
+            ps.setDate(4, Date.valueOf(b.getStartDate()));
+            ps.setDate(5, Date.valueOf(b.getReturnDate()));
 
             return ps.executeUpdate() > 0;
 

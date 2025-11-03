@@ -16,7 +16,7 @@ public class CustomerDAO extends DAO {
     public static void main(String[] args) {
         CustomerDAO cDao = new CustomerDAO();
         try {
-            System.out.println("");
+            System.out.println(cDao.getCustomerByUserId(2));
         } catch (Exception e) {
             System.err.println("");
         }

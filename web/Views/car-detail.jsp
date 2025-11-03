@@ -337,7 +337,6 @@
                 onChange: function (selectedDates) {
                     if (selectedDates.length > 0) {
                         pickupDateTime = selectedDates[0];
-
                         returnPicker.set('minDate', new Date(pickupDateTime.getTime() + 24 * 60 * 60 * 1000));
 
                         if (returnDateTime && returnDateTime <= pickupDateTime) {
@@ -376,9 +375,7 @@
                 const diffTime = Math.abs(returnDateTime - pickupDateTime);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 const rentalDays = Math.max(1, diffDays);
-
                 const totalPerDay = pricePerDay;
-
                 const finalTotal = totalPerDay * rentalDays;
 
                 document.getElementById("rentalDays").textContent = rentalDays + " ngày";
@@ -391,9 +388,16 @@
                 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
 
+            function formatDateForBackend(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return year + '-' + month + '-' + day;
+            }
+
             document.getElementById("btnRent").addEventListener("click", function () {
                 const isLoggedIn = ${not empty user};
-                
+
                 if (!isLoggedIn) {
                     Swal.fire({
                         icon: 'warning',
@@ -412,7 +416,7 @@
                     });
                     return;
                 }
-                
+
                 if (!pickupDateTime || !returnDateTime) {
                     Swal.fire({
                         icon: 'warning',
@@ -430,46 +434,98 @@
                 const totalPerDay = pricePerDay;
                 const finalTotal = totalPerDay * rentalDays;
 
-                let pickupDate = document.getElementById("pickupDate").value;
-                let returnDate = document.getElementById("returnDate").value;
-                let totalPrice = formatNumber(finalTotal);
+                let pickupDateDisplay = document.getElementById("pickupDate").value;
+                let returnDateDisplay = document.getElementById("returnDate").value;
+                let totalPriceDisplay = formatNumber(finalTotal);
+
+                let pickupDateBackend = formatDateForBackend(pickupDateTime);
+                let returnDateBackend = formatDateForBackend(returnDateTime);
 
                 Swal.fire({
                     title: 'Xác nhận đặt xe',
                     html: `
-                            <div style="text-align: left; line-height: 1.8;">
-                              <p><strong>Nhận xe:</strong> ` + pickupDate + `</p>
-                              <p><strong>Trả xe:</strong> ` + returnDate + `</p>
-                              <p><strong>Số ngày thuê:</strong> ` + rentalDays + ` ngày</p>
-                              <p><strong>Tổng tiền:</strong> ` + totalPrice + `đ</p>
-                            </div>
-                          `,
+                        <div style="text-align: left; line-height: 1.8;">
+                          <p><strong>Nhận xe:</strong> ` + pickupDateDisplay + `</p>
+                          <p><strong>Trả xe:</strong> ` + returnDateDisplay + `</p>
+                          <p><strong>Số ngày thuê:</strong> ` + rentalDays + ` ngày</p>
+                          <p><strong>Tổng tiền:</strong> ` + totalPriceDisplay + `đ</p>
+                        </div>
+                    `,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: 'Xác nhận',
                     cancelButtonText: 'Hủy',
-                    confirmButtonColor: 'green',
-                    cancelButtonColor: 'gray',
+                    confirmButtonColor: '#10b981',
+                    cancelButtonColor: '#6b7280',
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
                             url: "${pageContext.request.contextPath}/booking",
-                            method: "POST",
+                            method: "GET",
                             data: {
                                 carId: carId,
-                                pickupDate: pickupDate,
-                                returnDate: returnDate,
+                                pickupDate: pickupDateBackend,
+                                returnDate: returnDateBackend,
                                 rentalDays: rentalDays,
-                                totalPrice: totalPrice
-                            }, success(response) {
+                                totalPrice: finalTotal
+                            },
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Đặt xe thành công!',
+                                        text: response.message || 'Chúng tôi sẽ liên hệ với bạn sớm nhất.',
+                                        confirmButtonText: 'Đóng',
+                                        confirmButtonColor: '#10b981'
+                                    }).then(() => {
+                                        window.location.href = '${pageContext.request.contextPath}/homepage';
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Lỗi',
+                                        text: response.message || 'Có lỗi xảy ra khi đặt xe!',
+                                        confirmButtonText: 'Đóng',
+                                        confirmButtonColor: '#dc3545'
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                let errorMessage = 'Có lỗi xảy ra khi đặt xe!';
+
+                                try {
+                                    const response = JSON.parse(xhr.responseText);
+                                    errorMessage = response.message || errorMessage;
+                                } catch (e) {
+                                    if (xhr.status === 401) {
+                                        errorMessage = 'Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.';
+                                    } else if (xhr.status === 403) {
+                                        errorMessage = 'Bạn không có quyền thực hiện thao tác này!';
+                                    } else if (xhr.status === 409) {
+                                        errorMessage = 'Xe đã được đặt trong khoảng thời gian này!';
+                                    } else if (xhr.status === 404) {
+                                        errorMessage = 'Không tìm thấy thông tin xe hoặc khách hàng!';
+                                    } else if (xhr.status === 400) {
+                                        errorMessage = 'Thông tin đặt xe không hợp lệ!';
+                                    }
+                                }
+
                                 Swal.fire({
-                                    icon: 'success',
-                                    title: 'Đặt xe thành công!',
-                                    text: 'Chúng tôi sẽ liên hệ với bạn sớm nhất.',
+                                    icon: 'error',
+                                    title: 'Lỗi',
+                                    text: errorMessage,
                                     confirmButtonText: 'Đóng',
-                                    confirmButtonColor: '#28a745'
+                                    confirmButtonColor: '#dc3545'
                                 });
+
+                                // If session expired, redirect to login
+                                if (xhr.status === 401) {
+                                    setTimeout(() => {
+                                        window.location.href = '${pageContext.request.contextPath}/login';
+                                    }, 2000);
+                                }
                             }
                         });
                     }
