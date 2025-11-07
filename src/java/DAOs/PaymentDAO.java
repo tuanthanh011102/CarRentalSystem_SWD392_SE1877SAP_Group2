@@ -77,13 +77,9 @@ public class PaymentDAO extends DAO {
                      INSERT INTO `crs`.`payment`
                      (`booking_id`,
                      `amount`,
-                     `payment_method`,
-                     `gateway_txn_id`,
-                     `paid_at`)
+                     `payment_method`,)
                      VALUES
                      (?,
-                     ?,
-                     ?,
                      ?,
                      ?;
                      """;
@@ -95,8 +91,6 @@ public class PaymentDAO extends DAO {
             ps.setLong(1, p.getBookingId());
             ps.setBigDecimal(2, p.getAmount());
             ps.setString(3, p.getPaymentMethod());
-            ps.setString(4, p.getGatewayTxnId());
-            ps.setTimestamp(5, Timestamp.valueOf(p.getPaidAt()));
 
             return ps.executeUpdate() > 0;
 
