@@ -7,6 +7,7 @@ package DAOs;
 import Entities.Booking;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -99,6 +100,8 @@ public class BookingDAO extends DAO {
                 b.setCustomerId(rs.getLong("customer_id"));
                 b.setStartDate(rs.getDate("start_date").toLocalDate());
                 b.setReturnDate(rs.getDate("return_date").toLocalDate());
+                b.setCarId(rs.getLong("car_id"));
+                b.setPrice(rs.getDouble("price"));
                 b.setBookingStatus(rs.getString("booking_status"));
                 b.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                 b.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
@@ -119,34 +122,43 @@ public class BookingDAO extends DAO {
         return b;
     }
 
-    public boolean createBooking(Booking b) throws Exception {
+    public long createBooking(Booking b) throws Exception {
         String sql = """
-                     INSERT INTO `crs`.`booking`
-                     (`customer_id`,
-                     `car_id`,
-                     `price`,
-                     `start_date`,
-                     `return_date`)
-                     VALUES
-                     (?,
-                     ?,
-                     ?,
-                     ?,
-                     ?);
-                     """;
-
+                 INSERT INTO `booking`
+                 (`customer_id`,
+                 `car_id`,
+                 `price`,
+                 `start_date`,
+                 `return_date`)
+                 VALUES
+                 (?,
+                 ?,
+                 ?,
+                 ?,
+                 ?);
+                 """;
         try {
             con = dbc.getConnection();
-            ps = con.prepareStatement(sql);
-
+            ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setLong(1, b.getCustomerId());
             ps.setLong(2, b.getCarId());
             ps.setDouble(3, b.getPrice());
             ps.setDate(4, Date.valueOf(b.getStartDate()));
             ps.setDate(5, Date.valueOf(b.getReturnDate()));
 
-            return ps.executeUpdate() > 0;
+            int affectedRows = ps.executeUpdate();
 
+            if (affectedRows == 0) {
+                throw new Exception("Creating booking failed, no rows affected.");
+            }
+
+            rs = ps.getGeneratedKeys();
+
+            if (rs.next()) {
+                return rs.getLong(1);
+            } else {
+                throw new Exception("Creating booking failed, no ID obtained.");
+            }
         } catch (SQLException e) {
             throw new Exception("Something wrong during createBooking(): " + e.getMessage());
         } finally {

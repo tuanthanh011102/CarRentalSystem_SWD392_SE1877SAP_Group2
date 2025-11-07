@@ -249,14 +249,14 @@
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Nhận xe</label>
                                 <input type="text" id="pickupDate" 
                                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none cursor-pointer bg-white"
-                                       placeholder="23/10/2025   21:00" readonly>
+                                       placeholder="23/10/2025" readonly>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Trả xe</label>
                                 <input type="text" id="returnDate" 
                                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:outline-none cursor-pointer bg-white"
-                                       placeholder="24/10/2025   20:00" readonly>
+                                       placeholder="24/10/2025" readonly>
                             </div>
 
                             <div class="flex items-center justify-between p-3 bg-green-50 rounded-xl">
@@ -329,11 +329,10 @@
             let returnDateTime = null;
 
             const pickupPicker = flatpickr("#pickupDate", {
-                enableTime: true,
-                dateFormat: "d/m/Y   H:i",
+                enableTime: false,
+                dateFormat: "d/m/Y",
                 time_24hr: true,
                 minDate: "today",
-                defaultHour: 21,
                 onChange: function (selectedDates) {
                     if (selectedDates.length > 0) {
                         pickupDateTime = selectedDates[0];
@@ -350,11 +349,10 @@
             });
 
             const returnPicker = flatpickr("#returnDate", {
-                enableTime: true,
-                dateFormat: "d/m/Y   H:i",
+                enableTime: false,
+                dateFormat: "d/m/Y",
                 time_24hr: true,
                 minDate: new Date(Date.now() + 24 * 60 * 60 * 1000),
-                defaultHour: 20,
                 onChange: function (selectedDates) {
                     if (selectedDates.length > 0) {
                         returnDateTime = selectedDates[0];
@@ -462,7 +460,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             url: "${pageContext.request.contextPath}/booking",
-                            method: "GET",
+                            method: "POST",
                             data: {
                                 carId: carId,
                                 pickupDate: pickupDateBackend,
@@ -475,12 +473,11 @@
                                 if (response.success) {
                                     Swal.fire({
                                         icon: 'success',
-                                        title: 'Đặt xe thành công!',
-                                        text: response.message || 'Chúng tôi sẽ liên hệ với bạn sớm nhất.',
+                                        title: 'Đặt giữ chỗ xe thành công!',
                                         confirmButtonText: 'Đóng',
                                         confirmButtonColor: '#10b981'
                                     }).then(() => {
-                                        window.location.href = '${pageContext.request.contextPath}/homepage';
+                                        window.location.href = '${pageContext.request.contextPath}/booking?bid=' + response.bookingId;
                                     });
                                 } else {
                                     Swal.fire({
