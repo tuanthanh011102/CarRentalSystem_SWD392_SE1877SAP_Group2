@@ -70,8 +70,11 @@ public class BookingController extends HttpServlet {
 
             long bid = Long.parseLong(bidParam);
 
-            Booking b = bookingDao.getBookingById(bid);
-            if (b == null) {
+            Booking b = null;
+
+            try {
+                b = bookingDao.getBookingById(bid);
+            } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Booking not found");
                 return;
             }
@@ -298,7 +301,7 @@ public class BookingController extends HttpServlet {
             b.setPrice(totalPrice);
             b.setStartDate(pickupDate);
             b.setReturnDate(returnDate);
-            b.setBookingStatus("pending");
+            b.setBookingStatus("payment pending");
 
             try {
                 long createdId = bookingDao.createBooking(b);

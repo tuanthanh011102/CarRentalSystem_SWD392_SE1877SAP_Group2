@@ -4,10 +4,7 @@
  */
 package DAOs;
 
-import Entities.Booking;
 import Entities.Payment;
-import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -50,7 +47,7 @@ public class PaymentDAO extends DAO {
                 p.setPaymentMethod(rs.getString("payment_method"));
                 p.setStatus(rs.getString("status"));
                 p.setGatewayTxnId(rs.getString("gateway_txn_id"));
-                p.setPaidAt(rs.getTimestamp("paid_at").toLocalDateTime());
+                p.setPaidAt(rs.getTimestamp("paid_at") != null ? rs.getTimestamp("paid_at").toLocalDateTime() : null);
                 p.setRefundedAmount(rs.getBigDecimal("refunded_amount"));
                 p.setRefundStatus(rs.getString("refund_status"));
                 p.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
@@ -77,11 +74,11 @@ public class PaymentDAO extends DAO {
                      INSERT INTO `crs`.`payment`
                      (`booking_id`,
                      `amount`,
-                     `payment_method`,)
+                     `payment_method`)
                      VALUES
                      (?,
                      ?,
-                     ?;
+                     ?);
                      """;
 
         try {
@@ -105,12 +102,13 @@ public class PaymentDAO extends DAO {
         }
     }
 
-    public boolean updatePaymentStatusByBookingId(long bookingId, String status) throws Exception {
+    public boolean updatePaymentStatusByBookingId(long bookingId, String status, String gateway_txn_id, Timestamp paid_at) throws Exception {
         String sql = """
                      UPDATE `crs`.`payment`
                      SET
                      `status` = ?,
-                     `updated_at` = ?
+                     `gateway_txn_id` = ?,
+                     `paid_at` = ?
                      WHERE `booking_id` = ?;
                      """;
 
@@ -119,8 +117,9 @@ public class PaymentDAO extends DAO {
             ps = con.prepareStatement(sql);
 
             ps.setString(1, status);
-            ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-            ps.setLong(3, bookingId);
+            ps.setString(2, gateway_txn_id);
+            ps.setTimestamp(3, paid_at);
+            ps.setLong(4, bookingId);
 
             return ps.executeUpdate() > 0;
 

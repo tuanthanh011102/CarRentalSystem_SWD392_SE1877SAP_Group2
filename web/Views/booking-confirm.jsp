@@ -286,12 +286,14 @@
                        class="flex items-center justify-center px-8 py-4 bg-white border-2 border-gray-300 hover:border-green-500 hover:bg-green-50 rounded-xl text-gray-800 font-semibold transition-all">
                         Về trang chủ
                     </a>
-                    <form action="${pageContext.request.contextPath}/payment/request" method="POST">
-                        <button type="submit" class="flex items-center justify-center px-8 py-4 gradient-bg hover:shadow-2xl text-white font-bold rounded-xl transition-all transform hover:scale-105">
-                            Thanh Toán
-                        </button>
-                        <input type="hidden" name="bid" value="${booking.bookingId}" />
-                    </form>
+                    <c:if test="${booking.bookingStatus == 'payment pending'}">
+                        <form action="${pageContext.request.contextPath}/payment/request" method="POST">
+                            <button type="submit" class="flex items-center justify-center px-8 py-4 gradient-bg hover:shadow-2xl text-white font-bold rounded-xl transition-all transform hover:scale-105">
+                                Thanh Toán
+                            </button>
+                            <input type="hidden" name="bid" value="${booking.bookingId}" />
+                        </form>
+                    </c:if>
                 </div>
 
                 <div class="mt-8 bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-lg">

@@ -67,15 +67,31 @@ public class VNPayRequestController extends HttpServlet {
         String orderType = "other";
         long amount = (long) b.getPrice() * 100;
 
-        Payment p = new Payment();
-        p.setBookingId(bid);
-        p.setAmount(BigDecimal.valueOf(amount));
-        p.setPaymentMethod(paymentMethod);
+        Payment p = null;
 
         try {
-            paymentDao.createPayment(p);
-        } catch (Exception ex) {
-            Logger.getLogger(VNPayRequestController.class.getName()).log(Level.SEVERE, null, ex);
+            p = paymentDao.getPaymentByBookingId(bid);
+        } catch (Exception e) {
+            Logger.getLogger(VNPayRequestController.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        if (p == null) {
+            p = new Payment();
+            p.setBookingId(bid);
+            p.setAmount(BigDecimal.valueOf(b.getPrice()));
+            p.setPaymentMethod(paymentMethod);
+
+            try {
+                paymentDao.createPayment(p);
+            } catch (Exception ex) {
+                Logger.getLogger(VNPayRequestController.class.getName()).log(Level.SEVERE, null, ex);
+                System.err.println(ex);
+                return;
+            }
+        } else {
+            if (p.getStatus().equals("completed") || p.getStatus().equals("refunded")) {
+                return;
+            }
         }
 
         String bankCode = req.getParameter("bankCode");
@@ -150,6 +166,7 @@ public class VNPayRequestController extends HttpServlet {
         job.addProperty("data", paymentUrl);
         Gson gson = new Gson();
 //        resp.getWriter().write(gson.toJson(job));
+        req.getSession(false).setAttribute("bid", bid);
         resp.sendRedirect(paymentUrl);
     }
 
