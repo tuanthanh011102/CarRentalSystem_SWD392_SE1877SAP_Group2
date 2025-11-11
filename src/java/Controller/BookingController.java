@@ -233,6 +233,15 @@ public class BookingController extends HttpServlet {
                     out.print(jsonResponse.toString());
                     return;
                 }
+
+                if ((c.getCccdId() == null || c.getCccdId().isEmpty())
+                        || (c.getGplx() == null || c.getGplx().isEmpty())) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("message", "Bạn phải cung cấp đủ CCCD và Giấy Phép Lái Xe trước khi thuê xe!");
+                    out.print(jsonResponse.toString());
+                    return;
+                }
             } catch (Exception ex) {
                 Logger.getLogger(BookingController.class.getName()).log(Level.SEVERE,
                         "Error fetching customer", ex);

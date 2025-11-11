@@ -18,6 +18,7 @@ public class Customer {
     private String phone;
     private String address;
     private String cccdId;
+    private String gplx;
     private String email;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -107,6 +108,14 @@ public class Customer {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getGplx() {
+        return gplx;
+    }
+
+    public void setGplx(String gplx) {
+        this.gplx = gplx;
     }
 
     @Override

@@ -16,7 +16,7 @@ public class CustomerDAO extends DAO {
     public static void main(String[] args) {
         CustomerDAO cDao = new CustomerDAO();
         try {
-            System.out.println(cDao.getCustomerByUserId(2));
+            System.out.println(cDao.getCustomerByUserId(8).getGplx());
         } catch (Exception e) {
             System.err.println("");
         }
@@ -47,6 +47,7 @@ public class CustomerDAO extends DAO {
                 c.setEmail(rs.getString("email"));
                 c.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                 c.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+                c.setGplx(rs.getString("gplx"));
             } else {
                 throw new Exception("customer not found");
             }
