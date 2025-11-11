@@ -20,7 +20,7 @@ public class CRSDbContext {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/crs";
             String username = "root"; 
-            String password = "hoanganh221";
+            String password = "221";
             Connection connection = DriverManager.getConnection(url, username, password);
             return connection;
         } catch (ClassNotFoundException e) {
